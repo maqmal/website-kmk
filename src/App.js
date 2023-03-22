@@ -22,7 +22,7 @@ function App() {
     const selectedDateRange = getSelectedDateRange();
     Promise.all(
       selectedDateRange.map((date) => {
-        return fetch(`http://localhost:3000/kurs-pajak?date=${date}`)
+        return fetch(`https://kurs-kmk-api-production.up.railway.app/kurs-pajak?date=${date}`)
           .then((response) => response.json())
           .then((data) => {
             const kursTable = data.KursTable.map((kurs) => ({
@@ -151,6 +151,8 @@ function App() {
   return (
     <div className="App">
       <form onSubmit={handleSubmit}>
+        <h1>Database kurs KMK - preview build</h1>
+        <h3>Select date range:</h3>
         <label htmlFor="start-date">Start Date:</label>
         &nbsp;
         <input
@@ -160,7 +162,7 @@ function App() {
           value={startDate}
           onChange={handleStartDateChange}
         />
-        <br />
+        <br /><br />
         <label htmlFor="end-date">End Date:</label>
         &nbsp;
         <input
@@ -170,7 +172,7 @@ function App() {
           value={endDate}
           onChange={handleEndDateChange}
         />
-        <br />
+        <br /><br />
         <button type="submit" disabled={loading}>
           {loading ? "Loading..." : "Get Data"}
         </button>
@@ -207,7 +209,7 @@ function App() {
             <button type="submit" disabled={loading} onClick={handleExportExcel}>
               {loading ? "Loading..." : "Export to Excel"}
             </button>
-            <div>{loading ? <p>Loading...</p> : renderTable()}</div>
+            <div>{renderTable()}</div>
           </div>
         )}
       </div>
