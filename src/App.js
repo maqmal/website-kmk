@@ -124,7 +124,7 @@ function App() {
         const valueDiv = valueAsNumber/100
         return valueDiv;
       }
-      return formattedValue;
+      return formattedValue.replace('.', ',');
     }
     return '';
   };
@@ -134,7 +134,7 @@ function App() {
     setTimeout(() => {
       const dateRange = getSelectedDateRange();
       const data = [
-        ["Date", ...selectedCurrencies],
+        ["Date", "Dasar Hukum", ...selectedCurrencies],
         ...dateRange.map((date) =>
           [new Date(date).toLocaleDateString('en-GB'), ...selectedCurrencies.map((curr) => formatCurrency(kursData[date][curr], curr))]
         ),
