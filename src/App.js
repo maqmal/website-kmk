@@ -136,7 +136,7 @@ function App() {
       const data = [
         ["Date", "Dasar Hukum", ...selectedCurrencies],
         ...dateRange.map((date) =>
-          [new Date(date).toLocaleDateString('en-GB'), ...selectedCurrencies.map((curr) => formatCurrency(kursData[date][curr], curr))]
+          [new Date(date).toLocaleDateString('en-GB'), kursData[date]['DasarHukum'], ...selectedCurrencies.map((curr) => formatCurrency(kursData[date][curr], curr))]
         ),
       ];
       const ws = XLSX.utils.aoa_to_sheet(data);
