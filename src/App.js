@@ -1,5 +1,18 @@
 import React, { useState } from "react";
 import * as XLSX from "xlsx";
+import Paper from '@mui/material/Paper';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import { styled } from '@mui/material/styles';
+import { tableCellClasses } from '@mui/material/TableCell';
+import Stack from '@mui/material/Stack';
+import Container from '@mui/material/Container';
+
+import Button from '@mui/material/Button';
 
 function App() {
   const [startDate, setStartDate] = useState("");
@@ -7,6 +20,29 @@ function App() {
   const [kursData, setKursData] = useState({});
   const [loading, setLoading] = useState(false);
   const [selectedCurrencies, setSelectedCurrencies] = useState([]);
+
+  // Table stuff
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: theme.palette.common.black,
+      color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
+  }));
+  
+  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    '&:nth-of-type(odd)': {
+      backgroundColor: theme.palette.action.hover,
+    },
+    // hide last border
+    '&:last-child td, &:last-child th': {
+      border: 0,
+    },
+  }));
+  // End of table stuff
+
 
   const handleStartDateChange = (event) => {
     setStartDate(event.target.value);
@@ -44,7 +80,6 @@ function App() {
       }, {});
       setKursData(kursData);
       setLoading(false);
-      console.log(kursData);
     });
   };
 
@@ -86,33 +121,41 @@ function App() {
 
   const renderTableHeader = () => {
     const headers = ["Date", "Dasar Hukum", ...selectedCurrencies];
-    return headers.map((header) => <th key={header}>{header}</th>);
+    return headers.map((header) => <StyledTableCell key={header}>{header}</StyledTableCell>);
   };
 
   const renderTableRows = () => {
     return Object.entries(kursData).map(([date, kursDataForDate]) => {
       const kursDataRow = selectedCurrencies.map((currency) => {
-        return <td key={currency}>{formatCurrency(kursDataForDate[currency], currency) || "-"}</td>;
+        return <StyledTableCell key={currency}>{formatCurrency(kursDataForDate[currency], currency) || "-"}</StyledTableCell>;
       });
   
       return (
-        <tr key={date}>
-          <td>{date}</td>
-          <td>{kursDataForDate["DasarHukum"]}</td>
+        <StyledTableRow key={date} hover>
+          <StyledTableCell>{date}</StyledTableCell>
+          <StyledTableCell>{kursDataForDate["DasarHukum"]}</StyledTableCell>
           {kursDataRow}
-        </tr>
+        </StyledTableRow>
       );
     });
   };
 
   const renderTable = () => {
     return (
-      <table>
-        <thead>
-          <tr>{renderTableHeader()}</tr>
-        </thead>
-        <tbody>{renderTableRows()}</tbody>
-      </table>
+      <Paper sx={{ width: '99%', overflow: 'hidden' }}>
+        <TableContainer sx={{ maxHeight: 540 }}>
+          <Table stickyHeader aria-label="sticky table">
+          <TableHead>
+              <TableRow>
+                {renderTableHeader()}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {renderTableRows()}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Paper>
     );
   };
   
@@ -149,34 +192,35 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <form onSubmit={handleSubmit}>
-        <h1>Database kurs KMK - preview build</h1>
-        <h3>Select date range:</h3>
-        <label htmlFor="start-date">Start Date:</label>
-        &nbsp;
-        <input
-          type="date"
-          id="start-date"
-          name="start-date"
-          value={startDate}
-          onChange={handleStartDateChange}
-        />
-        <br /><br />
-        <label htmlFor="end-date">End Date:</label>
-        &nbsp;
-        <input
-          type="date"
-          id="end-date"
-          name="end-date"
-          value={endDate}
-          onChange={handleEndDateChange}
-        />
-        <br /><br />
-        <button type="submit" disabled={loading}>
-          {loading ? "Loading..." : "Get Data"}
-        </button>
-        </form>
+      <div className="App">
+      <h1>Database Kurs KMK</h1>
+      <Container maxWidth="sm">
+        <p>Select date range</p>
+        <form onSubmit={handleSubmit}>
+            <Stack spacing={1} direction="row" className="date">
+              <label htmlFor="start-date">Start Date:</label>
+              <input
+                type="date"
+                id="start-date"
+                name="start-date"
+                value={startDate}
+                onChange={handleStartDateChange}
+              />
+              <label htmlFor="end-date">End Date:</label>
+              <input
+                type="date"
+                id="end-date"
+                name="end-date"
+                value={endDate}
+                onChange={handleEndDateChange}
+              />
+            </Stack>
+          <br />
+          <Button size="small" variant="contained" color="success" type="submit" disabled={loading}>{loading ? "Loading..." : "Get Data"}</Button>
+          <br /><br />
+          </form>
+        </Container>
+
         {Object.keys(kursData).length > 0 && (
           <div>
             <div>
@@ -190,6 +234,7 @@ function App() {
                 />
               </label>
             </div>
+            <br />
             <div>
               {Object.keys(kursData[Object.keys(kursData)[0]])
                 .filter((currency) => currency !== "DasarHukum")
@@ -206,10 +251,10 @@ function App() {
                 ))}
             </div>
             <br />
-            <button type="submit" disabled={loading} onClick={handleExportExcel}>
-              {loading ? "Loading..." : "Export to Excel"}
-            </button>
-            <div>{renderTable()}</div>
+            <Button size="small" variant="contained" color="success" type="submit" disabled={loading} onClick={handleExportExcel}>{loading ? "Loading..." : "Download to Excel"}</Button>
+            <br />
+            <br />
+            {renderTable()}
           </div>
         )}
       </div>
