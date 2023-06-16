@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/website-kmk/static/css/main.4124f68b.css",
-    "main.js": "/website-kmk/static/js/main.0e8a3f10.js",
+    "main.js": "/website-kmk/static/js/main.ded932bb.js",
     "static/js/787.44ae5e8a.chunk.js": "/website-kmk/static/js/787.44ae5e8a.chunk.js",
     "index.html": "/website-kmk/index.html",
     "main.4124f68b.css.map": "/website-kmk/static/css/main.4124f68b.css.map",
-    "main.0e8a3f10.js.map": "/website-kmk/static/js/main.0e8a3f10.js.map",
+    "main.ded932bb.js.map": "/website-kmk/static/js/main.ded932bb.js.map",
     "787.44ae5e8a.chunk.js.map": "/website-kmk/static/js/787.44ae5e8a.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.4124f68b.css",
-    "static/js/main.0e8a3f10.js"
+    "static/js/main.ded932bb.js"
   ]
 }
