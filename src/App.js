@@ -58,7 +58,7 @@ function App() {
     const selectedDateRange = getSelectedDateRange();
     Promise.all(
       selectedDateRange.map((date) => {
-        return fetch(`https://kurs-kmk-api-production.up.railway.app/kurs-pajak?date=${date}`)
+        return fetch(`https://database-kurs-kmk.vercel.app/api/kmkApi?date=${date}`)
           .then((response) => response.json())
           .then((data) => {
             const kursTable = data.KursTable.map((kurs) => ({
